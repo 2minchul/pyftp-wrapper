@@ -86,28 +86,45 @@ class PyFTP(pyftp.PyFTP):
         """
         self.ftp.storbinary('STOR %s' % remotepath, fp)
 
-    def put(self, local, remotepath=None):
-        """Copies a file between the local host and the remote host.
+    def get_fp(self, remotepath):
+        """Copies a file between the remote host and the local host.
 
-        :param str|object local: the local path and filename string or file-like object
-        :param str remotepath:
-            the remote path, else the remote :attr:`.pwd` and filename is used.
+        :param str remotepath: the remote path and filename, source
 
-        :raises IOError:
-            if epath doesn't exist
+        :return io.BytesIO() file-like object
+
+        :raises: IOError
         """
-        if isinstance(local, str):
-            return self.put_by_path(local, remotepath)
-        elif isinstance(local, bytes):
-            fp = io.BytesIO(local)
-            return self.put_fp(fp, remotepath)
-        elif hasattr(local, 'raw'):
-            return self.put_fp(local.raw, remotepath)
-        elif hasattr(local, 'read'):
-            return self.put_fp(local, remotepath)
+        f = io.BytesIO()
+        self.ftp.retrbinary('RETR %s' % remotepath, f.write)
+        f.seek(0)
+        return f
 
-    def get_by_path(self, remotepath, localpath=None, preserve_mtime=False):
-        return super(self.__class__, self).get(remotepath, localpath, preserve_mtime)
 
-    def put_by_path(self, localpath, remotepath=None, preserve_mtime=False):
-        return super(self.__class__, self).put(localpath, remotepath, preserve_mtime)
+def put(self, local, remotepath=None):
+    """Copies a file between the local host and the remote host.
+
+    :param str|object local: the local path and filename string or file-like object
+    :param str remotepath:
+        the remote path, else the remote :attr:`.pwd` and filename is used.
+
+    :raises IOError:
+        if epath doesn't exist
+    """
+    if isinstance(local, str):
+        return self.put_by_path(local, remotepath)
+    elif isinstance(local, bytes):
+        fp = io.BytesIO(local)
+        return self.put_fp(fp, remotepath)
+    elif hasattr(local, 'raw'):
+        return self.put_fp(local.raw, remotepath)
+    elif hasattr(local, 'read'):
+        return self.put_fp(local, remotepath)
+
+
+def get_by_path(self, remotepath, localpath=None, preserve_mtime=False):
+    return super(self.__class__, self).get(remotepath, localpath, preserve_mtime)
+
+
+def put_by_path(self, localpath, remotepath=None, preserve_mtime=False):
+    return super(self.__class__, self).put(localpath, remotepath, preserve_mtime)
