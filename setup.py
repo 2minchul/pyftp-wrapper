@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 
 # Include __about__.py.
@@ -9,11 +9,11 @@ with open(os.path.join(__dir__, 'pyftp_wrapper', '__about__.py')) as f:
     exec(f.read(), about)
 
 setup(
-    name='pyftp_wrapper',
+    name='pyftp-wrapper',
     version=about['__version__'],
     author=about['__author__'],
     author_email=about['__author_email__'],
-    packages=['pyftp_wrapper'],
+    packages=find_packages(),
     install_requires=['pyftp==0.1.0'],
 
     url='http://github.com/2minchul/pyftp-wrapper',
