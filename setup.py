@@ -13,8 +13,7 @@ setup(
     version=about['__version__'],
     author=about['__author__'],
     author_email=about['__author_email__'],
-
-    py_modules=['pyftp_wrapper'],
+    packages=['pyftp_wrapper'],
     install_requires=['pyftp==0.1.0'],
 
     url='http://github.com/2minchul/pyftp-wrapper',
